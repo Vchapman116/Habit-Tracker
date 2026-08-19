@@ -130,3 +130,9 @@ function getTodayString () {
           });
   
         renderHabits();
+
+        document.addEventListener("visibilitychange", function() {
+            if (document.visibilityState === "visible") {
+                renderHabits();
+            }
+        });
