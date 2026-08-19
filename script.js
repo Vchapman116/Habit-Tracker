@@ -136,3 +136,7 @@ function getTodayString () {
                 renderHabits();
             }
         });
+
+        window.addEventListener("pageshow", function(event) {
+            renderHabits();
+        });
