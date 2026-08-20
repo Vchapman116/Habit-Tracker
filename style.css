@@ -125,3 +125,14 @@ body {
           display: block;
       }
   }
+
+  #new-habit-input:focus {
+      outline: none; 
+      border: 1px solid #5c6bc0;
+      box-shadow: 0 0 0 3px rgba(92, 107, 192, 0.15);
+  }
+
+  .delete-btn:hover {
+      background-color: #c0392b;
+      transform: scale(1.05);
+  }
