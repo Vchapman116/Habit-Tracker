@@ -10,6 +10,33 @@ function getTodayString () {
   }
   
   let habits = JSON.parse(localStorage.getItem("habits")) || [];
+
+  function moveHabit(habit, direction) {
+      const isDone = habit.lastCompletedDate === getTodayString();
+
+      const sameGroup = habits.filter(function(h) {
+          return (h.lastCompletedDate === getTodayString()) === isDone;
+      });
+
+      sameGroup.sort(function(a, b) {
+          return a.order - b.order;
+      });
+
+      const position = sameGroup.indexOf(habit);
+      const swapPosition = position + direction;
+
+      if (swapPosition < 0 || swapPosition >= sameGroup.length) {
+          return;
+      }
+
+      const otherHabit = sameGroup[swapPosition];
+      const tempOrder = habit.order;
+      habit.order = otherHabit.order;
+      otherHabit.order = tempOrder;
+
+      localStorage.setItem("habits", JSON.stringify(habits));
+      renderHabits();
+  }
         
         function renderHabits() {
           document.getElementById("habit-list").innerHTML = "";
@@ -28,7 +55,11 @@ function getTodayString () {
           const sortedHabits = [...habits].sort(function(a,b) {
             const aDone = a.lastCompletedDate === getTodayString();
             const bDone = b.lastCompletedDate === getTodayString();
-            return aDone - bDone;
+
+            if (aDone !== bDone) {
+                return aDone - bDone;
+            }
+            return a.order - b.order;
           });
         
         sortedHabits.forEach (function(habit, index) {
@@ -75,6 +106,20 @@ function getTodayString () {
           editButton.className = "edit-btn";
           editButton.textContent = "Edit";
 
+          const upButton = document.createElement("button");
+          upButton.className = "move-btn";
+          upButton.textContent = "+";
+          upButton.addEventListener("click", function() {
+              moveHabit(habit, -1);
+          });
+
+          const downButton = document.createElement("button");
+          downButton.className = "move-btn";
+          downButton.textContent = "-"
+          downButton.addEventListener("click", function() {
+              moveHabit(habit, 1);
+          });
+
           editButton.addEventListener("click", function() {
               const newName = prompt("Edit habit name:", habit.name);
 
@@ -101,6 +146,13 @@ function getTodayString () {
           } else {
             row.style.opacity = "1";
           }
+
+          const moveButtons = document.createElement("div");
+          moveButtons.className = "move-buttons";
+          moveButtons.appendChild(upButton);
+          moveButtons.appendChild(downButton);
+
+          row.appendChild(moveButtons);
           row.appendChild(button);
           row.appendChild(editButton);
           row.appendChild(deleteButton);
@@ -116,7 +168,7 @@ function getTodayString () {
             return;
           }
   
-          habits.push({name: habitName, lastCompletedDate:null, streak: 0, bestStreak: 0});
+          habits.push({name: habitName, lastCompletedDate:null, streak: 0, bestStreak: 0, order: habits.length});
           localStorage.setItem("habits", JSON.stringify(habits));
         renderHabits();
   
