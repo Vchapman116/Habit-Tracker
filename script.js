@@ -131,7 +131,14 @@ function getTodayString () {
           });
   
           deleteButton.addEventListener("click", function() {
-            if (confirm("Delete \"" + habit.name + "\"? This can't be undone.")) {
+            let confirmMessage;
+
+            if (habit.streak > 0) {
+              confirmMessage = "Delete \"" + habit.name + "\"? Your " + habit.streak + " day streak will be lost too.";
+            } else {
+              confirmMessage = "Are you sure you want to remove \"" + habit.name + "\"?";
+            }
+            if (confirm(confirmMessage)) {
             const realIndex = habits.indexOf(habit);
             habits.splice(realIndex, 1);
             localStorage.setItem("habits", JSON.stringify(habits));
