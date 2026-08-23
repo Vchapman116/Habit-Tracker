@@ -173,3 +173,19 @@ body {
       transform: translateY(0);
     }
   }
+
+  @media (max-width: 480px) {
+    .habit.row {
+      gap: 6px;
+      padding: 12px 14px;
+    }
+
+    .habit-main {
+      width: 110px;
+    }
+
+    .move-btn, .edit-btn, .delete-btn {
+      padding: 6px  8px;
+      font-size: 13px;
+    }
+  }
