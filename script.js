@@ -52,7 +52,7 @@ function getTodayString () {
             return;
           }
   
-          const sortedHabits = [...habits].sort(function(a,b) {
+            const sortedHabits = [...habits].sort(function(a,b) {
             const aDone = a.lastCompletedDate === getTodayString();
             const bDone = b.lastCompletedDate === getTodayString();
 
@@ -65,17 +65,35 @@ function getTodayString () {
         sortedHabits.forEach (function(habit, index) {
           const button = document.createElement("button");
           const isDone = habit.lastCompletedDate === getTodayString();
-          const bestStreakClass = isDone ? "best-streak-on-green" : "best-streak";
-          button.innerHTML = '<span class="habit-name">' + habit.name + '</span> <span class="streak-badge">' + habit.streak + '</span> <span class="' + bestStreakClass + '">Best: ' + habit.bestStreak + "</span>";
-  
-          const nameSpan = button.querySelector(".habit-name");
-  
+          const bestStreakClass = "best-streak";
+          
+          button.textContent = habit.name;
+
           if (habit.lastCompletedDate === getTodayString()) {
             button.style.backgroundColor = "#4CAF50";
-            nameSpan.style.textDecoration = "line-through";
+            button.style.textDecoration = "line-through";
           } else {
-            nameSpan.style.textDecoration = "none";
+            button.style.textDecoration = "none";
           }
+
+          let streakHTML = "";
+          if (habit.streak > 0) {
+            streakHTML = '<span class="streak-badge">' + "Active: " + habit.streak + "</span>";
+          }
+
+          let bestStreakHTML = "";
+          if (habit.bestStreak > 0) {
+            bestStreakHTML = '<span class="' + bestStreakClass + '">Best: ' + habit.bestStreak + "</span>";
+          }
+
+          const streakInfo = document.createElement("div");
+            streakInfo.className = "streak-info";
+            streakInfo.innerHTML = streakHTML + " " + bestStreakHTML;
+
+          const habitMain = document.createElement("div");
+            habitMain.className = "habit-main";
+            habitMain.appendChild(button);
+            habitMain.appendChild(streakInfo);
   
           button.addEventListener("click", function() {
             if (habit.lastCompletedDate === getTodayString()) {
@@ -148,6 +166,10 @@ function getTodayString () {
   
           const row = document.createElement("div");
           row.className = "habit-row";
+          if (habit.isNew) {
+            row.classList.add("new-habit");
+            habit.isNew = false;
+          }
           if (habit.lastCompletedDate === getTodayString()) {
             row.style.opacity = "0.6";
           } else {
@@ -160,7 +182,7 @@ function getTodayString () {
           moveButtons.appendChild(downButton);
 
           row.appendChild(moveButtons);
-          row.appendChild(button);
+          row.appendChild(habitMain);
           row.appendChild(editButton);
           row.appendChild(deleteButton);
           document.getElementById("habit-list").appendChild(row);
@@ -175,7 +197,7 @@ function getTodayString () {
             return;
           }
   
-          habits.push({name: habitName, lastCompletedDate:null, streak: 0, bestStreak: 0, order: habits.length});
+          habits.push({name: habitName, lastCompletedDate:null, streak: 0, bestStreak: 0, order: habits.length, isNew: true});
           localStorage.setItem("habits", JSON.stringify(habits));
         renderHabits();
   
