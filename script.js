@@ -44,11 +44,17 @@ function getTodayString () {
           const doneCount = habits.filter (function(habit){
             return habit.lastCompletedDate === getTodayString();
           }).length;
+
+          let summaryText = doneCount + " of " + habits.length + " done today";
+
+          if (habits.length > 0 && doneCount === habits.length) {
+            summaryText = "Look at you, completing all your habits for the day. Nicely done!";
+          }
   
-          document.getElementById("habit-summary").textContent = doneCount + " of " + habits.length + " done today";
+          document.getElementById("habit-summary").textContent = summaryText;
           
           if (habits.length === 0) {
-            document.getElementById("habit-list").innerHTML = '<p class="empty-state">No habits yet - add one above!</p>';
+            document.getElementById("habit-list").innerHTML = '<p class="empty-state">Nothing to see here. Get started by adding a habit!</p>';
             return;
           }
   
