@@ -14,5 +14,10 @@
             <p id="habit-summary" class="summary-text"></p>
             <div id="habit-list"></div>
             <script src="script.js?v=2"></script>
+            <script>
+                if ("serviceWorker" in navigator) {
+                    navigator.serviceWorker.register("sw.js");
+                }
+            </script>
     </body>
 </html>
