@@ -215,6 +215,23 @@ function getTodayString () {
               document.getElementById("add-habit-btn").click();
             }
           });
+
+          document.getElementById("export-btn").addEventListener("click", function(){
+            const dataString = JSON.stringify(habits);
+            prompt("Copy this text and save it somewhere safe:", dataString);
+          });
+
+          document.getElementById("import-btn").addEventListener("click", function() {
+            const dataString = prompt("Paste your saved habit data here:");
+
+            if (dataString === null || dataString.trim === "") {
+              return;
+            }
+
+            habits = JSON.parse(dataString);
+            localStorage.setItem("habits", JSON.stringify(habits));
+            renderHabits();
+          });
   
         renderHabits();
 
