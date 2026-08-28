@@ -1,13 +1,18 @@
-function getTodayString () {
-    const today = new Date();
-    return today.toISOString().split("T")[0];
-  }
-  
-  function getYesterdayString() {
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    return yesterday.toISOString().split("T")[0];
-  }
+function getLocalDateString(date) {
+  return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0");
+}
+
+function getTodayString() {
+  return getLocalDateString(new Date());
+}
+
+function getYesterdayString() {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return getLocalDateString(d);
+}
+
+console.log(getTodayString(), getYesterdayString());
   
   let habits = JSON.parse(localStorage.getItem("habits")) || [];
 
